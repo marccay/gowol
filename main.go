@@ -57,7 +57,6 @@ func createMagic(macAddr string) []byte {
 	for i := 0; i < 16; i++ {
 		b = append(b, macBytes...)
 	}
-	fmt.Println(b)
 	return b
 }
 
