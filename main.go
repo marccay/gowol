@@ -19,10 +19,15 @@ func main() {
 		switch x {
 			case "-p":
 				port = args[i+1]
+				errSyntax(port)
 			case "-ip":
 				ip = args[i+1]
-			case "-mac":
+				errSyntax(ip)
+			case "-mac", "-m":
 				macAddr = args[i+1]
+				errSyntax(macAddr)
+			case "-h", "-help":
+				help()
 			default:
 				continue
 		}
@@ -46,7 +51,6 @@ func main() {
 
 	wakeLan(macAddr, ip, port)
 }
-
 
 func createMagic(macAddr string) []byte {
 	macBytes, err := hex.DecodeString(strings.Join(strings.Split(macAddr, ":"), ""))
@@ -74,4 +78,23 @@ func wakeLan(macAddr string, ip string, port string) {
 	if err != nil {
 		panic(err)
 	}
+}
+
+func errSyntax(x string) {
+	cmd := []string{"-ip","-i","-p","-mac","-m"}
+	for _, i := range cmd {
+		if x == i {
+			fmt.Println("improper syntax")
+			help()
+		}
+	}
+}
+
+func help() {
+	fmt.Println("gowol [option] [argument]")
+	fmt.Println("options:")
+	fmt.Println("\t-ip [ip-address]")
+	fmt.Println("\t-p [port]")
+	fmt.Println("\t-m [mac address]")
+	os.Exit(1)
 }
